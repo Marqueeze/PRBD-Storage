@@ -29,6 +29,7 @@ class Operation(db.Model):
     operation_type = db.Column(db.String(16), index=True)
     date_time = db.Column(db.TIMESTAMP, default=datetime.now())
     operated_wares = db.relationship("Ware", secondary=ware_operation, backref="operation")
+    client_id = db.Column(db.Integer, db.ForeignKey('Client.id'))
 
     def __repr__(self):
         return "Operation {}".format(self.name)
@@ -46,6 +47,7 @@ class Ware(db.Model):
 class Client(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), index=True)
+    operations = db.relationship('Operation', backref='client')
 
     def __repr__(self):
         return "Client {}".format(self.name)
