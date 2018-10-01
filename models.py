@@ -77,4 +77,4 @@ class Client(db.Model):
     operations = db.relationship('Operation', back_populates='client')
 
     def __repr__(self):
-        return "Client {}, {}".format(self.name, self.operations)
+        return "Client {}, Operations: {}".format(self.name, self.operations)

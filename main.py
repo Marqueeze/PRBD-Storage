@@ -10,22 +10,30 @@ def index():
 
 @app.route('/Client', methods=['GET', 'POST'])
 def client():
-    # c = Client(name='Дмитрий Иванович Соломатин')
+    c = Client(name='Дмитрий Иванович Соломатин')
     w = Ware(name="Классы", price=0.01)
-    # o = Operation(id_Client=1, operation_type='+')
-    # op_w = WareOperation(ware_count=15)
-    # op_w.wares = w
-    # o.op_ware.append(op_w)
-    # db.session.add(c)
-    # db.session.add(w)
-    # db.session.add(o)
+    o = Operation(id_Client=1, operation_type='+')
+    op_w = WareOperation(ware_count=15)
+    op_w.wares = w
+    o.op_ware.append(op_w)
+    s = Storage.query.get(1)
     st_w = WareStorage(ware_count=15)
     st_w.wares = w
-    s = Storage.query.get(1)
     s.st_ware.append(st_w)
+    db.session.add(c)
+    db.session.add(w)
+    db.session.add(o)
     db.session.add(s)
     db.session.commit()
     return 'Client added'
+
+
+@app.route('/Storage', methods=['GET', 'POST'])
+def storage():
+    c = Storage(phone_number='88005553535', address='Улица Пушкина Дом Колотушкина')
+    db.session.add(c)
+    db.session.commit()
+    return "Storage added"
 
 
 @app.route('/Ware', methods=['GET', 'POST'])
@@ -34,15 +42,6 @@ def ware():
     db.session.add(c)
     db.session.commit()
     return 'Ware added'
-
-
-@app.route('/Storage', methods=['GET', 'POST'])
-def storage():
-    c = Storage(phone_number='88005553535', address='Улица Пушкина Дом Колотушкина')
-    # c.wares.append(Ware.query.filter_by(name='Классы').first())
-    db.session.add(c)
-    db.session.commit()
-    return "Storage added"
 
 
 @app.route('/Operation', methods=['GET', 'POST'])
