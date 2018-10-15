@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Attestation_themes.iml" filepath="$PROJECT_DIR$/.idea/Attestation_themes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Attestation_themes/.idea/Attestation_themes.iml" filepath="$PROJECT_DIR$/../Attestation_themes/.idea/Attestation_themes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PRBD-Storage.iml" filepath="$PROJECT_DIR$/.idea/PRBD-Storage.iml" />
     </modules>
   </component>
 </project>

@@ -131,8 +131,13 @@ body{
 
 .menu li:hover{
 	width: 250px;
-	height: 133px;
-	line-height: 133px;
+	height: 218px;
+	line-height: 218px;
+}
+
+.menu li.home:hover{
+    width: 250px;
+    height: 133px;
 }
 
 .menu li a{
@@ -176,12 +181,16 @@ body{
 	background: url(/static/images/paper.png) center no-repeat;
 }
 
-.change-info a:first-child:before{
+.find a:first-child:before{
 	background: url(/static/images/info.png) center no-repeat;
 }
 
 .settings a:first-child:before{
 	background: url(/static/images/settings.png) center no-repeat;
+}
+
+.home a:first-child:before{
+    background: url(/static/images/home.png) center no-repeat;
 }
 
 .refactoring{
@@ -193,3 +202,44 @@ body{
     padding:0;
 }
 
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-size: 14px;
+  background: white;
+  max-width: 70%;
+  width: 70%;
+  border-collapse: collapse;
+  text-align: left;
+  margin: 10px;
+}
+
+th {
+  font-weight: normal;
+  color: #039;
+  border-bottom: 2px solid #6678b1;
+  padding: 10px 8px;
+}
+
+td {
+  color: #669;
+  padding: 9px 8px;
+  transition: .3s linear;
+}
+
+.change{
+  display: inline-block;
+}
+
+div.change{
+  position:relative;
+}
+
+.change.button{
+  padding-top: 18px;
+  position: absolute;
+}
+
+.change.button-recipe{
+  padding-top: 50px;
+  position: absolute;
+}

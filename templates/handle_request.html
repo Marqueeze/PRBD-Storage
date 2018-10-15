@@ -1,0 +1,23 @@
+{% extends "storage_ware.html"%}
+{% block handle_request %}
+<h1>REQUEST - {{ request.operation_type }}</h1>
+<form>
+    <table class="request">
+        <tr><th>Ware</th><th>Count</th><th>ToStorage:</th></tr>
+        {% for opw in request.op_ware %}
+        {% form.append() %}
+        {% set i = 0 %}
+            <tr>
+                <td>{{ Ware.query.get(opw.ware_id).name }}</td> <td>{{ opw.ware_count }}</td>
+                <td>
+                        {{ form.inputs[i] }}
+                        {% for error in form.errors.login %}
+                            <span class="error">[{{error}}]</span>
+                        {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" class="form-element button" value="Handle">
+</form>
+{% endblock %}

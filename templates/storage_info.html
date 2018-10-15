@@ -1,0 +1,42 @@
+{% extends "base.html"%}
+
+{% block form %}
+<h1>STORAGES</h1>
+{% if st_id %}
+    <form action="" method="post" name="login">
+        {{form.hidden_tag()}}
+        <p class="form-element">
+            Address:<br>
+            {{form.phone_number(size=80)}}<br>
+            {% for error in form.errors.phone_number %}
+                <span class="error">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p class="form-element">
+            Phone number:<br>
+            {{form.address(size=50)}}<br>
+            {% for error in form.errors.address %}
+                <span class="error">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+		<input class="form-element button" type="submit" value="Submit">
+    </form>
+{% endif %}
+<table class="storages">
+    <tr><th>ID</th><th>Address</th><th>Phone number</th></tr>
+    {% for storage in Storage.query.all() %}
+        <tr>
+            {% if storage.id == st_id %}
+                <td>{{ storage.id }}</td> <td>-----------------</td>
+                <td>-----------------</td>
+            {% else %}
+                <td>{{ storage.id }}</td> <td>{{ storage.address }}</td>
+                <td>{{ storage.phone_number }}</td>
+                {% if User.query.get(user_id).role == ROLE_ADMIN %}
+                    <td><a href="{{ url_for('storage_info', _id=storage.id) }}"></a></td>
+                {% endif %}
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

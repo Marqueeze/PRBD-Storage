@@ -1,0 +1,14 @@
+{% extends "base.html"%}
+
+{% block form %}
+<h1>CLIENTS</h1>
+<table class="client">
+    <tr><th>ID</th><th>Name</th><th>Operations count</th></tr>
+    {% for client in Client.query.all() %}
+        <tr>
+            <td>{{ client.id }}</td> <td>{{ client.name }}</td>
+            <td>{{ client.operations|count }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

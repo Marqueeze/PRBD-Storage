@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block form%}
+<h1>New Operation</h1>
+<form action="" method="post" name="login">
+    {{form.hidden_tag()}}
+    <p>
+        Enter operation type:<br>
+        {{form.operation_type(size=32)}}<br>
+        {% for error in form.errors.operation_type %}
+            <span class="error">[{{error}}]</span>
+        {% endfor %}<br>
+    </p>
+    <p>
+        Enter wares with counts in "WARE:COUNT, WARE:COUNT" format:<br>
+        {{form.wares(size=64)}}<br>
+        {% for error in form.errors.wares %}
+            <span class="error">[{{error}}]</span>
+        {% endfor %}<br>
+    </p>
+    <p><input type="submit" class="form-element button" value="Register"></p>
+</form>
+{% endblock %}
