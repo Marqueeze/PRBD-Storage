@@ -2,7 +2,7 @@
 
 {% block form %}
 <h1>STORAGES</h1>
-{% if st_id %}
+{% if st_id != 0 and User.query.get(user_id) == ROLE_ADMIN %}
     <form action="" method="post" name="login">
         {{form.hidden_tag()}}
         <p class="form-element">
@@ -26,7 +26,7 @@
     <tr><th>ID</th><th>Address</th><th>Phone number</th></tr>
     {% for storage in Storage.query.all() %}
         <tr>
-            {% if storage.id == st_id %}
+            {% if storage.id == st_id and User.query.get(user_id) == ROLE_ADMIN %}
                 <td>{{ storage.id }}</td> <td>-----------------</td>
                 <td>-----------------</td>
             {% else %}

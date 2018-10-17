@@ -10,7 +10,7 @@
 		{% if messages %}
 		<ul id="flashed">
 			{% for message in messages %}
-				<span class="error">{{message}}</span>
+				<span class="error">{{message}}</span><br>
 			{% endfor %}
 		</ul>
 		{% endif %}
@@ -27,23 +27,23 @@
                     <a href="{{ url_for('logout') }}">Logout</a>
                 {% endif %}
             </li>
-            <li class="actions">
-                <a>Actions</a>
+            {%if user_id %}
                 {% if User.query.get(user_id).role == ROLE_USER %}
-                    <a href="{{ url_for('new_operation') }}">New operation</a>
+                    <li class="actions-user">
                 {% else %}
-                    <ul class="menu">
-                        <li class="ware-storage">
-                            <a>Ware-Storage tables</a>
-                            {% for storage in Storage.query.all() %}
-                                <a href="{{ url_for('storage_ware', id=storage.id) }}">Storage #{{ storage.id }}</a>
-                            {% endfor %}
-                        </li>
-                    </ul>
-                    <a href="{{ url_for('client_info') }}">Clients</a>
+                    <li class="actions-admin">
                 {% endif %}
-                 <a href="{{ url_for('storage_info') }}">Storages info</a>
-            </li>
+                    <a>Actions</a>
+                    <a href="{{ url_for('storage_info', _id=0) }}">Storages info</a>
+                    {% if User.query.get(user_id).role == ROLE_USER %}
+                        <a href="{{ url_for('new_operation') }}">New operation</a>
+                    {% else %}
+                        <a href="{{ url_for('client_info') }}">Clients</a>
+                        <a href="{{ url_for('storage_ware') }}">Storage-ware info</a>
+                        <a href="{{ url_for('handle_request') }}">Handle request</a>
+                    {% endif %}
+                </li>
+            {% endif %}
             <li class="settings">
                 <a>Statistics</a>
                 <a>Storages count: {{Storage.query.all()|count}}</a>

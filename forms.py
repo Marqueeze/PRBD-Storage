@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import StringField, TextAreaField, IntegerField, PasswordField
+from wtforms import StringField, TextAreaField, IntegerField, PasswordField, FieldList, SelectField
 from wtforms.validators import Regexp, NoneOf, URL, Optional, DataRequired, EqualTo, Length, Email
 from models import *
 from config import ROLE_USER, ROLE_ADMIN, ADMIN_PASSWORD
@@ -102,19 +102,18 @@ class RegisterForm(Form):
 
 
 class NewOperationForm(EntityForm):
-    operation_type = StringField('operation_type', validators=[Regexp("(Вывоз)|(Завоз)", message="Вывоз или завоз"),
-                                                               DataRequired()])
-    wares = StringField('wares', validators=[Regexp('([\w\s]+:\d+,?\s+)+')])
+    operation_type = SelectField('operation_type', choices=[("завоз", "Завоз"), ("вывоз", "Вывоз")],
+                                 validators=[DataRequired()])
+    wares = StringField('wares', validators=[Regexp('([\w\s]+:\d+,?\s*)+')])
 
     def create_instance(self, _id=0):
-        c = Client.query.get(User.query.get(_id).id)
-        date_time = datetime.now()
-        o = Operation(operation_type=self.operation_type.data.lower(), client_id=c.id, datetime=date_time)
+        c = Client.query.filter_by(user_id=_id).first()
+        date_time = datetime.today()
+        o = Operation(operation_type=self.operation_type.data.lower(), client_id=c.id, date_time=date_time)
         c.operations.append(o)
         db.session.add(o)
         db.session.add(c)
         db.session.commit()
-        o = Operation.query.filter_by(datetime=date_time, client_id=c.id).first()
         added_wop = [self.operation_type.data.lower()]
         for pare in self.wares.data.lower().replace(',', ' ').split(' '):
             if pare:
@@ -138,7 +137,5 @@ class NewOperationForm(EntityForm):
 
 
 class HandleRequestForm(Form):
-    inputs = list()
+    inputs = FieldList(StringField(validators=[DataRequired()]))
 
-    def append(self):
-        self.inputs.append(IntegerField('input'+str(len(self.inputs)), validators=[Optional()]))

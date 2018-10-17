@@ -5,7 +5,7 @@
     {{form.hidden_tag()}}
     <p>
         Enter operation type:<br>
-        {{form.operation_type(size=32)}}<br>
+        {{form.operation_type()}}<br>
         {% for error in form.errors.operation_type %}
             <span class="error">[{{error}}]</span>
         {% endfor %}<br>
@@ -17,6 +17,6 @@
             <span class="error">[{{error}}]</span>
         {% endfor %}<br>
     </p>
-    <p><input type="submit" class="form-element button" value="Register"></p>
+    <p><input type="submit" class="form-element button" value="Submit"></p>
 </form>
 {% endblock %}

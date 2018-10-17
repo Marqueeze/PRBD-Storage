@@ -7,7 +7,8 @@
         <tr><th>Ware</th><th>Count</th></tr>
         {% for stw in storage.st_ware %}
             <tr>
-                <td>{{ Ware.query.get(stw.ware_id).name }}</td> <td>{{ stw.ware_count }}</td>
+                <td>{{ Ware.query.get(stw.ware_id).name }}</td>
+                <td>{%if stw.ware_count != 0 %} {{ stw.ware_count }} {% else %} Не в наличии {% endif %}</td>
                 {% if not request %}
                     <td class="dispose">
                         <a href="{{url_for('storage_ware', st_id=storage.id, w_id=stw.ware_id, ware_count=count.value)}}">
@@ -20,8 +21,11 @@
         {% endfor %}
     </table>
 {% endfor %}
-
-{% block handle_request %}
-{% endblock %}
+{% if request %}
+    <div class="request">
+        {% block handle_request %}
+        {% endblock %}
+    </div>
+{% endif %}
 
 {% endblock %}

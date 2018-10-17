@@ -1,23 +1,53 @@
 {% extends "base.html" %}
 
 {% block form %}
-{% set c = Client.query.filter_by(user_id=user_id).first() %}
-{% if c %}
-    {% if c.role == ROLE_USER %}
+{% set u = User.query.get(user_id) %}
+{% if u is not none %}
+    {% if u.role == ROLE_USER %}
+        {% set c = Client.query.filter_by(user_id=u.id).first() %}
         <h1>MY OPERATIONS</h1><br>
         <table class="operations">
-        <tr><th>ID</th><th>Type</th><th>Wares</th><th>Datetime</th></tr>
+        <tr><th>ID</th><th>Type</th><th>Wares</th><th>Datetime</th><th>Handled</th></tr>
             {% for operation in Operation.query.filter_by(client_id=c.id).all() %}
                 <tr>
                     <td>{{ operation.id }}</td> <td>{{ operation.operation_type }}</td>
                     {% set wop = WareOperation.query.filter_by(operation_id=operation.id).all() %}
-                    <td>{{ '; '|join(wop) }}</td>
+                    <td>{% for i in range(wop|length) %}{{ wop[i] }};<br> {% endfor %}</td>
                     <td>{{ operation.date_time }}</td>
+                    <td>{% if operation.handled == 0 %} Waiting to be handled {% else %} Handled {% endif %}</td>
                 </tr>
             {% endfor %}
         </table>
     {% else %}
-        <a> ADMIN FRONT PAGE</a>
+        <h1>CREATE NEW STORAGE</h1>
+        <form action="" method="post" name="login">
+            {{form.hidden_tag()}}
+            <p class="form-element">
+                Address:<br>
+                {{form.address(size=80)}}<br>
+                {% for error in form.errors.address %}
+                    <span class="error">[{{error}}]</span>
+                {% endfor %}<br>
+            </p>
+            <p class="form-element">
+                Phone number:<br>
+                {{form.phone_number(size=20)}}<br>
+                {% for error in form.errors.phone_number %}
+                    <span class="error">[{{error}}]</span>
+                {% endfor %}<br>
+            </p>
+            <input class="form-element button" type="submit" value="Submit">
+        </form>
+        <h1>STORAGES</h1>
+        <table class="storages">
+            <tr><th>ID</th><th>Address</th><th>Phone number</th></tr>
+            {% for storage in Storage.query.all() %}
+                <tr>
+                    <td>{{ storage.id }}</td> <td>{{ storage.address }}</td>
+                    <td>{{ storage.phone_number }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 {% endif %}
 {% endblock %}

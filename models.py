@@ -1,6 +1,13 @@
 from __init__ import db
 from datetime import datetime
 from config import ROLE_ADMIN, ROLE_USER
+from __init__ import lm
+from flask_login import UserMixin
+
+
+@lm.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class WareOperation(db.Model):
@@ -76,7 +83,7 @@ class Client(db.Model):
         }[index]
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(256), index=True)
     password = db.Column(db.String(128))

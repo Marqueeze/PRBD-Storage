@@ -140,6 +140,16 @@ body{
     height: 133px;
 }
 
+.menu li.actions-user:hover{
+    width: 250px;
+    height: 134px;
+}
+
+.menu li.actions-admin:hover{
+    width: 250px;
+    height: 215px;
+}
+
 .menu li a{
 	display: block;
 	width: 200px;
@@ -213,6 +223,11 @@ table {
   margin: 10px;
 }
 
+table.storage{
+  max-width: 35%;
+  width: 35%;
+}
+
 th {
   font-weight: normal;
   color: #039;
@@ -232,6 +247,14 @@ td {
 
 div.change{
   position:relative;
+}
+
+div.request{
+  position: absolute;
+  top: 35px;
+  right: -6%;
+  width: 60%;
+  max-width: 60%;
 }
 
 .change.button{

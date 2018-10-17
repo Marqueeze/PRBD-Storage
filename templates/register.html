@@ -12,6 +12,13 @@
         {% endfor %}<br>
     </p>
     <p>
+        Please enter your Name:<br>
+        {{form.name}}<br>
+        {% for error in form.errors.name %}
+            <span class="error">[{{error}}]</span>
+        {% endfor %}<br>
+    </p>
+    <p>
         Enter your password:<br>
         {{form.password(size=50)}}<br>
         {% for error in form.errors.password %}
