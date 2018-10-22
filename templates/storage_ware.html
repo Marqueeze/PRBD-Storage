@@ -1,26 +1,27 @@
 {% extends "base.html"%}
 
 {% block form %}
-{% for storage in Storage.query.all() %}
-    <h1>STORAGE #{{storage.id}}</h1>
-    <table class="storage">
-        <tr><th>Ware</th><th>Count</th></tr>
-        {% for stw in storage.st_ware %}
-            <tr>
-                <td>{{ Ware.query.get(stw.ware_id).name }}</td>
-                <td>{%if stw.ware_count != 0 %} {{ stw.ware_count }} {% else %} Не в наличии {% endif %}</td>
-                {% if not request %}
-                    <td class="dispose">
-                        <a href="{{url_for('storage_ware', st_id=storage.id, w_id=stw.ware_id, ware_count=count.value)}}">
-                            Dispose:
-                        </a><br>
-                        <input name="count" type="number">
-                    </td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    </table>
-{% endfor %}
+<form action="" method="post" name="login">
+    {{ ad_form.hidden_tag() }}
+    {% for storage in Storage.query.all() %}
+        <h1>STORAGE #{{storage.id}}</h1>
+            <table class="storage">
+                <tr><th>Ware</th><th>Count</th></tr>
+                {% for stw in storage.st_ware %}
+                    <tr>
+                        <td>{{ Ware.query.get(stw.ware_id).name }}</td>
+                        <td>{%if stw.ware_count != 0 %} {{ stw.ware_count }} {% else %} Не в наличии {% endif %}</td>
+                        {% if not request %}
+                            <td>
+                                {{ ad_form.append_data(stw.ware_count) }}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+    {% endfor %}
+    <input type="submit">
+</form>
 {% if request %}
     <div class="request">
         {% block handle_request %}

@@ -193,21 +193,18 @@ def storage_info(_id):
 
 
 @app.route('/storage_ware', methods=['GET', 'POST'])
-def storage_ware(st_id=None, w_id=None, ware_count=None):
-    if st_id is not None and w_id is not None and ware_count is not None:
-        ws = WareStorage.query.filter_by(storage_id=st_id, ware_id=w_id).first()
-        if ws:
-            if ws.ware_count >= ware_count:
-                ws.ware_count -= ware_count
-            else:
-                ws.ware_count = 0
-            db.session.add(ws)
-            db.session.commit()
-            flash("Disposed ware_id:{} from storage_id:{} in count of {}".format(w_id, st_id, ware_count))
-            return redirect(url_for("storage_ware"))
-        raise Exception(
-            "Trying to remove from empty ware_id:{} from storage_id:{} in count of {}".format(w_id, st_id, ware_count))
-    return render_template("storage_ware.html", user_id=g.id,
+def storage_ware():
+    ad_form = HandleRequestForm()
+    if ad_form.validate_on_submit():
+        i = 0
+        for s in Storage.query.all():
+            for stw in s.st_ware:
+                stw.ware_count = ad_form.inputs[i].data
+                db.session.add(stw)
+                i += 1
+        db.session.commit()
+        return redirect(url_for('storage_ware'))
+    return render_template("storage_ware.html", user_id=g.id, ad_form=ad_form, request=None,
                            Ware=Ware, Storage=Storage, Operation=Operation, Client=Client, User=User,
                            WareStorage=WareStorage, WareOperation=WareOperation,
                            ROLE_ADMIN=1, ROLE_USER=0)
@@ -236,12 +233,6 @@ def Print_DB():
 
 if __name__ == '__main__':
     # Clear_DB()
-    o = Operation.query.get(4)
-    op_w = o.op_ware[0]
-    op_w.ware_count = 13
-    db.session.add(op_w)
-    db.session.add(o)
-    db.session.commit()
     for x in list(Print_DB()):
         print(x)
     app.run(debug=True)

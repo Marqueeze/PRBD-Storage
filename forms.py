@@ -139,3 +139,5 @@ class NewOperationForm(EntityForm):
 class HandleRequestForm(Form):
     inputs = FieldList(StringField(validators=[DataRequired()]))
 
+    def append_data(self, _data):
+        return self.inputs.append_entry(data=_data)
