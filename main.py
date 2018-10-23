@@ -57,12 +57,11 @@ def register():
                 return redirect(url_for('register'))
             user = User(login=form.login.data.lower(), password=form.password.data, role=role)
             db.session.add(user)
-            db.session.commit()
             if user.role == ROLE_USER:
                 c = Client(name=form.name.data.lower(),
                            user_id=User.query.filter_by(
                                login=form.login.data.lower(), password=form.password.data, role=role
-                           ).id)
+                           ).first().id)
                 db.session.add(c)
                 db.session.commit()
             flash('Registred succesfully')
@@ -119,7 +118,7 @@ def handle_request():
                 if form.validate_on_submit():
                     handle_in(_request, form)
                     return after_handle(_request)
-                return render_template("handle_request.html", form=form,
+                return render_template("handle_request.html", form=form, ad_form=HandleRequestForm(),
                                        request=_request, user_id=g.id,
                                        Ware=Ware, Storage=Storage, Operation=Operation, Client=Client, User=User,
                                        WareStorage=WareStorage, WareOperation=WareOperation,
@@ -142,13 +141,13 @@ def after_handle(_request):
 def handle_in(_request, form):
     for i in range(len(form.inputs)):
         s = Storage.query.get(int(form.inputs.data[i]))
-        stw = WareStorage.query.filter_by(storage_id=s.id, ware_id=_request.ware_op[i].ware_id).first()
+        stw = WareStorage.query.filter_by(storage_id=s.id, ware_id=_request.op_ware[i].ware_id).first()
         if not stw:
-            stw = WareStorage(ware_id=_request.ware_op[i].ware_id,
-                              ware_count=_request.ware_op[i].ware_count,
+            stw = WareStorage(ware_id=_request.op_ware[i].ware_id,
+                              ware_count=_request.op_ware[i].ware_count,
                               storage_id=s.id)
         else:
-            stw.ware_count += _request.ware_op[i].ware_count
+            stw.ware_count += _request.op_ware[i].ware_count
         s.st_ware.append(stw)
         db.session.add(s)
         db.session.add(stw)
@@ -218,6 +217,18 @@ def client_info():
                            ROLE_ADMIN=1, ROLE_USER=0)
 
 
+@app.route('/delete_user/<user_id>')
+def delete_user(_user_id):
+    if g.user.role == ROLE_ADMIN:
+        db.session.delete(User.query.get(_user_id))
+        db.session.delete(Client.query.filter_by(user_id=_user_id).first())
+        db.session.commit()
+    else:
+        flash('Нет, соре')
+        return redirect(url_for('client_info') or url_for('index'))
+    return redirect(url_for('client_info'))
+
+
 def Clear_DB():
     for t in [Client, Storage, Operation, Ware, WareOperation, WareStorage, User]:
         for t1 in t.query.all():
@@ -230,9 +241,7 @@ def Print_DB():
         yield t.query.all()
 
 
-
 if __name__ == '__main__':
-    # Clear_DB()
-    for x in list(Print_DB()):
-        print(x)
+    print(User.query.all())
+    print(Client.query.all())
     app.run(debug=True)

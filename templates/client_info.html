@@ -4,11 +4,21 @@
 <h1>CLIENTS</h1>
 <table class="client">
     <tr><th>ID</th><th>Name</th><th>Operations count</th></tr>
-    {% for client in Client.query.all() %}
-        <tr>
-            <td>{{ client.id }}</td> <td>{{ client.name }}</td>
-            <td>{{ client.operations|count }}</td>
-        </tr>
-    {% endfor %}
+    {% if User.query.get(user_id).role == ROLE_ADMIN %}
+        {% for client in Client.query.all() %}
+            <tr>
+                <td>{{ client.id }}</td> <td>{{ client.name }}</td>
+                <td>{{ client.operations|count }}</td>
+                <td><a href="{{url_for('delete_user', user_id=client.user_id)}}">Delete user</a></td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        {% for client in Client.query.all() %}
+            <tr>
+                <td>{{ client.id }}</td> <td>{{ client.name }}</td>
+                <td>{{ client.operations|count }}</td>
+            </tr>
+        {% endfor %}
+    {% endif %}
 </table>
 {% endblock %}

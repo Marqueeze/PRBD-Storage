@@ -74,7 +74,7 @@ class Client(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return "Client {}".format(self.name)
+        return "Id {}, user_id {}".format(self.id, self.user_id)
 
     def get_item(self, index):
         return {
