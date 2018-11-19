@@ -217,7 +217,7 @@ def client_info():
                            ROLE_ADMIN=1, ROLE_USER=0)
 
 
-@app.route('/delete_user/<user_id>')
+@app.route('/delete_user/<_user_id>')
 def delete_user(_user_id):
     if g.user.role == ROLE_ADMIN:
         db.session.delete(User.query.get(_user_id))
